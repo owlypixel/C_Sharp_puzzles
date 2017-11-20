@@ -1,8 +1,61 @@
-пользователь задает длину массива, потом вводит строки соответственно длине массива, вывести строки что ввел пользователь.
----------------------
-пользователь вводит разное кол-во чисел, которое он казывает сам, вывести максимальное число из тех что ввел пользователь.
----------------------
-пользователь вводит числа, вывести на экран не повторяющиеся элементы.
----------------------
-пользователь загадывает число, потом вводится кол-во попыток для отгадки этого числа. Если после истечения попыток число не было угадано, вывести что он проиграл.
-----------------------
+// 1.Remove duplicates from the array.
+
+Console.WriteLine("Please enter the array length");
+int length = int.Parse(Console.ReadLine());
+int[] arr = new int[length];
+
+for (int i = 0; i < length; i++)
+{
+    Console.WriteLine("Enter the " + i + " array value");
+    string userInput =  Console.ReadLine();
+    arr[i] = int.Parse(userInput);
+}
+Console.WriteLine("Removing identical elements...");
+for (int i = 0; i < length; i++)
+{
+    for (int j = (i + 1); j < length;)
+    {
+        if (arr[i] == arr[j])
+        {
+            for (int k = j; k < arr.Length - 1; k++)
+            {
+                arr[k] = arr[k + 1];
+            }
+            length--;
+        }
+        else
+            j++;
+    }
+}
+
+Console.WriteLine("The resulting array:");
+
+int[] uniqueArr = new int[length];
+for (int i = 0; i < length; i++)
+{
+    uniqueArr[i] = arr[i];
+}
+
+
+for (int i = 0; i < uniqueArr.Length; i++)
+{
+    Console.Write(uniqueArr[i]);
+}
+Console.WriteLine("");
+Console.WriteLine("Done!");
+
+// 2.Find 2 max elements of the array
+
+int[] arr = { 1, 4, 6, 8, 4, 11 };
+int length = arr.Length;
+int max = arr[0];
+int second = arr[0];
+for (int i = 0; i < length; i++)
+{
+    if (arr[i] > max)
+    {
+        second = max;
+        max = arr[i];
+    }
+
+}

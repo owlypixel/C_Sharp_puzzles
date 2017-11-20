@@ -1,0 +1,1 @@
+- Arrays in C# are of a fixed size - once initialized you can only modify items, but you cannot add or remove items.
