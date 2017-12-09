@@ -1,0 +1,86 @@
+The logic for building a menu in console
+---------------------------------------------
+- define the menu you wish to build (string array)
+- create a method that returns int number and takes menu to build
+The method should do the following:
+- define a variable for current item and initialize it to 0;
+- define an object to read in key info
+- create an infinite while loop
+The loop should contain the following:
+- clear the console
+- print heading text
+- create a for loop that goes over all of the menu items
+The for loop should contain the following:
+- if current item variable equals to current iteration of the loop - select it with color, otherwise print it with regular color.
+- assign user prompt to the key object
+Next, the key handler part
+- if user presses 'DownArrow', increment current item, inside perform a check for the bounds of the menu. If we are out of menu, assign current item to 0
+- if user presses 'UpArrow', decrement current item, inside perform a check for the bounds of the menu. If current menu is less than 0, assign it the last menu item - 1;  
+- if user presses 'Enter' - return current item
+
+
+The code:
+-----------------------------------
+class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] userMenu = {
+                "Create a user",
+                "List users",
+                "Delete a user",
+            };
+
+            BuildMenu(userMenu);   
+        }
+
+        static int BuildMenu(string[] menu)
+        {
+            int curItem = 0;
+            ConsoleKeyInfo key;
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Welcome!");
+                Console.WriteLine("---------------------");
+                for (int i = 0; i < menu.Length; i++)
+                {
+                    if(curItem == i)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("{0}. {1}", i + 1, menu[i]);
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.WriteLine("{0}. {1}", i + 1, menu[i]);
+                    }
+                }
+                Console.WriteLine("---------------------");
+                Console.WriteLine("You can select you menu with the arrow keys");
+                key = Console.ReadKey();
+
+                if (key.Key.ToString() == "DownArrow")
+                {
+                    curItem++;
+                    if(curItem >= menu.Length)
+                    {
+                        curItem = 0;
+                    }
+                }
+                else if(key.Key.ToString() == "UpArrow")
+                {
+                    curItem--;
+                    if(curItem < 0)
+                    {
+                        curItem = menu.Length - 1;
+                    }
+                }
+                else if(key.Key.ToString() == "Enter")
+                {
+                    return curItem;
+                }
+            }
+        }
+    }
