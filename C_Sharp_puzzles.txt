@@ -141,3 +141,22 @@ enum Days
     Friday,
     Saturday
 }
+
+// 6. Try-Catch. User enters a number, if it's a number - exit, a letter - write "Incorrect number", repeat prompt.
+
+while (true)
+{
+    Console.WriteLine("Please enter a number");
+    var value = Console.ReadLine();
+
+    try
+    {
+        int number = int.Parse(value);
+        Console.WriteLine("Correct");
+        break;
+    }
+    catch(Exception ex)
+    {
+        Console.WriteLine("Incorrect number");
+    }
+}  
