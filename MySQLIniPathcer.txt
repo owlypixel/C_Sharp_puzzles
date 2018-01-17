@@ -1,0 +1,84 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MysqlIniPatcher
+{
+    class Program
+    {
+        const string default_innodb_buffer_pool_size = "innodb_buffer_pool_size=500M";
+        const string default_max_allowed_packet = "max_allowed_packet=64M";
+
+        static void Main(string[] args)
+        {
+            if (args == null || args.Length == 0)
+            {
+                Console.WriteLine("Ini-file path is required");
+                return;
+            }
+
+            try
+            {
+                _PatchIniFile(args[0]);
+                Console.WriteLine("Ini-file has been patched successfully!");
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+        }
+
+        static void _PatchIniFile(string iniFilePath)
+        {
+            if (!File.Exists(iniFilePath))
+            {
+                Console.WriteLine("Ini-file was not found: " + iniFilePath);
+                return;
+            }
+
+            var lines = File.ReadAllLines(iniFilePath).ToList();
+            if (lines.Count == 0)
+            {
+                Console.WriteLine("Ini-file is empty");
+                return;
+            }
+
+            var parameters = new[] {
+                new MySqlParameter { Name = "innodb_buffer_pool_size", Value = "500M" },
+                new MySqlParameter { Name = "max_allowed_packet", Value = "64M" }
+            };
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                lines[i] = lines[i].Trim();
+                if (lines[i].StartsWith("#"))
+                    continue;
+
+                _UpdateParameters(lines, i, parameters);
+            }
+
+            foreach (var p in parameters)
+                if (!p.WasFound)
+                    lines.Add(p.KeyValue);
+
+            File.WriteAllLines(iniFilePath, lines.ToArray());
+        }
+
+        static void _UpdateParameters(List<string> lines, int i, MySqlParameter[] parameters)
+        {
+            foreach (var p in parameters)
+            {
+                if (lines[i].StartsWith(p.Name))
+                {
+                    p.WasFound = true;
+                    lines[i] = p.KeyValue;
+                    return;
+                }
+            }
+        }
+    }
+}
